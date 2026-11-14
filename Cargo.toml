@@ -1,6 +1,6 @@
 [package]
 name = "heic_webp_converter"
-version = "0.1.1"
+version = "0.2.0"
 edition = "2024"
 description = "Batch convert HEIC, WebP and AVIF photos to JPG or PNG, offline."
 repository = "https://github.com/fredle/heic-webp-converter"
