@@ -6,10 +6,15 @@ description = "Batch convert HEIC, WebP and AVIF photos to JPG or PNG, offline."
 repository = "https://github.com/fredle/heic-webp-converter"
 
 [dependencies]
+base64 = "0.23.1"
+ed25519-dalek = "3.0.0"
 eframe = { version = "0.36.2", default-features = false, features = ["glow", "default_fonts"] }
+image = { version = "0.25.10", default-features = false, features = ["jpeg", "png", "webp", "bmp", "tiff", "gif"] }
+rfd = "0.18.0"
 serde = { version = "1.0.229", features = ["derive"] }
 serde_json = "1.0.151"
 velopack = "1.2"
+windows = { version = "0.62.2", features = ["Win32_Graphics_Imaging", "Win32_System_Com", "Win32_Foundation", "Win32_UI_Shell", "Win32_UI_WindowsAndMessaging"] }
 
 [profile.release]
 opt-level = "s"

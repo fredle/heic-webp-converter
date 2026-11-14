@@ -6,8 +6,11 @@
 #![windows_subsystem = "windows"]
 
 mod app;
+mod convert;
+mod license;
 mod settings;
 mod update;
+mod wic;
 
 fn main() {
     // First thing, always: Velopack may need to run an install/uninstall/

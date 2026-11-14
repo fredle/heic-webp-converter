@@ -13,6 +13,30 @@ pub struct Settings {
     /// a day.
     #[serde(default)]
     pub last_update_check: u64,
+    #[serde(default)]
+    pub format: crate::convert::Format,
+    /// JPG quality, 1-100.
+    #[serde(default = "default_quality")]
+    pub quality: u8,
+    /// Resize so the longest edge is at most `max_edge` pixels.
+    #[serde(default)]
+    pub resize: bool,
+    #[serde(default = "default_max_edge")]
+    pub max_edge: u32,
+    /// Folder for converted files; `None` writes next to each original.
+    #[serde(default)]
+    pub out_dir: Option<std::path::PathBuf>,
+    /// The licence key as pasted; verified on every start.
+    #[serde(default)]
+    pub license_key: String,
+}
+
+fn default_quality() -> u8 {
+    90
+}
+
+fn default_max_edge() -> u32 {
+    2048
 }
 
 fn default_true() -> bool {
@@ -24,6 +48,12 @@ impl Default for Settings {
         Self {
             auto_update: true,
             last_update_check: 0,
+            format: Default::default(),
+            quality: default_quality(),
+            resize: false,
+            max_edge: default_max_edge(),
+            out_dir: None,
+            license_key: String::new(),
         }
     }
 }
