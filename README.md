@@ -32,10 +32,9 @@ Many PCs already have them. Install, then press **Try again**.
 
 ## Free and unlocked
 
-Every feature is free. When the paid tier is switched on (`BUY_URL` in
-`src/license.rs`), a free run converts three photos at a time and a one-off
-unlock removes the limit. A licence key is the buyer's email signed by the
-licence server and is checked offline. While `BUY_URL` is empty there is no
+Every feature is free. A free run converts three photos at a time, and a
+one-off unlock (£4.99, at https://heic.leatham.net/buy) removes the limit. A licence key is the buyer's email signed by the
+licence server and is checked offline. If `BUY_URL` in `src/license.rs` is emptied, there is no
 limit at all.
 
 ## Install

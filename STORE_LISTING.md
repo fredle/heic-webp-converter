@@ -14,7 +14,7 @@ iPhone photos arrive as HEIC. Images saved from the web arrive as WebP or AVIF. 
 
 HEIC & WebP Converter turns them into ordinary JPG or PNG files. Drop photos or whole folders on the window, choose the format, and press Convert. It works offline: your photos never leave your PC.
 
-It converts for free. There is no trial that runs out and no watermark.
+It converts for free, three photos per run, with no trial that runs out and no watermark. An optional one-off unlock (£4.99, bought on our website) removes the three-photo limit for large batches.
 
 What it reads: HEIC, HEIF, AVIF, JXL, WebP, JPG, PNG, BMP, TIFF and GIF.
 What it writes: JPG, PNG or lossless WebP.
@@ -36,7 +36,8 @@ No account, no ads, no telemetry.
 - Converts HEIC, HEIF, AVIF, JXL, WebP, BMP, TIFF and GIF to JPG, PNG or WebP
 - Drag and drop files or whole folders, including subfolders
 - Works offline; photos are never uploaded
-- Free to convert, with no watermark and no trial period
+- Free to convert three photos per run, with no watermark and no trial period
+- Optional one-off unlock for unlimited batches
 - Adjustable JPG quality
 - Optional resize to a maximum width or height
 - Save beside the originals or in a folder you choose
@@ -63,9 +64,11 @@ Photo & video > Photo editing (or Utilities & tools > File managers if not offer
 
 ## Pricing
 
-Free. If the paid unlock is enabled for a release, state it here and in the
-description as required by Store policy 10.8.4: "Free: three photos per run.
-Optional one-off unlock for unlimited batches, bought on our website."
+Freemium, from v0.1.1. Free: three photos per run. Optional one-off unlock
+for unlimited batches (£4.99), bought on our website at
+https://heic.leatham.net/buy. Store policy 10.8.4 requires this to be stated
+in the description, and the age rating answer "Does the app allow users to
+purchase digital goods?" to be Yes.
 
 ## Privacy
 

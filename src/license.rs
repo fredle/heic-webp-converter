@@ -11,7 +11,7 @@ use ed25519_dalek::{Signature, VerifyingKey};
 /// Where "Buy" sends people. While this is empty the app has no paid tier
 /// at all: the limit is off, so a build can never ship a paywall that
 /// nobody can pay.
-pub const BUY_URL: &str = "";
+pub const BUY_URL: &str = "https://heic.leatham.net/buy";
 
 /// Files converted per run without a licence.
 pub const FREE_BATCH: usize = 3;
