@@ -5,6 +5,7 @@ import type { AddressInfo } from 'node:net';
 import { generateKeyPairSync, verify } from 'node:crypto';
 import { handle, issueKey, escapeHtml } from '../src/app.ts';
 import type { CheckoutSession, Deps } from '../src/app.ts';
+import { pickLanguage, texts } from '../src/i18n.ts';
 
 const { publicKey, privateKey } = generateKeyPairSync('ed25519');
 const SESSION = 'cs_test_a1B2c3D4e5F6g7H8';
@@ -85,6 +86,42 @@ test('unpaid, unknown and malformed sessions get no key', async () => {
       assert.ok(!(await res.text()).includes('HWC1.'), query);
     }
   });
+});
+
+test('pages follow the browser language, falling back to English', async () => {
+  const sessions = { [SESSION]: { payment_status: 'paid', customer_details: { email: 'buyer@example.com' } } };
+  await withServer(sessions, async (origin) => {
+    const get = async (language: string) =>
+      (await fetch(`${origin}/thanks?session_id=${SESSION}`, { headers: { 'accept-language': language } })).text();
+    const key = issueKey('buyer@example.com', privateKey);
+    for (const [language, lang, phrase] of [
+      ['de-DE,de;q=0.9,en;q=0.8', 'de', 'Vielen Dank'],
+      ['ja', 'ja', 'ライセンスキー'],
+      ['zh-TW', 'zh-hant', '授權金鑰'],
+      ['zh-CN', 'zh-hans', '许可证密钥'],
+      ['sv-SE,sv;q=0.9', 'en', 'Thank you'],
+      ['en;q=0.5,fr;q=0.9', 'fr', 'Merci'],
+    ]) {
+      const html = await get(language);
+      assert.ok(html.includes(`<html lang="${lang}">`), language);
+      assert.ok(html.includes(phrase), language);
+      assert.ok(html.includes(key), language);
+      assert.ok(html.includes('buyer@example.com') && !/\{(email|unlock|activate)\}/.test(html), language);
+    }
+  });
+});
+
+test('every language has every text and keeps the placeholders', () => {
+  const keys = Object.keys(texts.en).sort();
+  assert.equal(Object.keys(texts).length, 14);
+  for (const [lang, t] of Object.entries(texts)) {
+    assert.deepEqual(Object.keys(t).sort(), keys, lang);
+    for (const value of Object.values(t)) assert.ok(value.trim(), lang);
+    for (const placeholder of ['{email}', '{unlock}', '{activate}']) {
+      assert.equal(t.thanksBody.split(placeholder).length, 2, `${lang} ${placeholder}`);
+    }
+  }
+  assert.equal(pickLanguage(undefined), 'en');
 });
 
 test('other paths and methods are not found', async () => {

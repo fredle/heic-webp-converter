@@ -2,6 +2,7 @@ import type { IncomingMessage, ServerResponse } from 'node:http';
 import { createPrivateKey, sign } from 'node:crypto';
 import type { KeyObject } from 'node:crypto';
 import { readFileSync } from 'node:fs';
+import { pickLanguage, texts } from './i18n.ts';
 
 // The licence server. It keeps no database: a licence key is the buyer's
 // email signed with Ed25519, so the paid Stripe checkout session is the only
@@ -68,21 +69,27 @@ export async function handle(
   }
 
   if (url.pathname === '/thanks') {
+    const lang = pickLanguage(req.headers['accept-language']);
+    const t = texts[lang];
     const id = url.searchParams.get('session_id') ?? '';
     if (!SESSION_ID.test(id)) {
-      return page(res, 400, 'That link is incomplete', 'Open the link from your payment confirmation again.');
+      return page(res, 400, lang, t.incompleteTitle, escapeHtml(t.incompleteBody));
     }
     const session = await deps.fetchSession(id);
     const email = session?.customer_details?.email?.trim().toLowerCase();
     if (!session || session.payment_status !== 'paid' || !email) {
-      return page(res, 402, 'Payment not found', 'This checkout has not been paid. If you were charged, reply to your receipt email and we will sort it out.');
+      return page(res, 402, lang, t.notPaidTitle, escapeHtml(t.notPaidBody));
     }
     const key = issueKey(email, deps.signingKey());
     return page(
       res,
       200,
-      'Thank you! Here is your licence key',
-      `Licensed to ${escapeHtml(email)}. In the app choose <b>Unlock</b>, paste the key and press <b>Activate</b>. Bookmark this page: it always shows your key.`,
+      lang,
+      t.thanksTitle,
+      escapeHtml(t.thanksBody)
+        .replace('{email}', escapeHtml(email))
+        .replace('{unlock}', `<b>${escapeHtml(t.unlock)}</b>`)
+        .replace('{activate}', `<b>${escapeHtml(t.activate)}</b>`),
       key,
     );
   }
@@ -94,18 +101,21 @@ export function escapeHtml(text: string): string {
   return text.replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
 }
 
-function page(res: ServerResponse, status: number, title: string, body: string, key?: string): void {
+/** `body` is HTML: callers escape everything they put in it. */
+function page(res: ServerResponse, status: number, lang: string, title: string, body: string, key?: string): void {
+  const t = texts[lang];
   const keyBlock = key
     ? `<textarea id="k" readonly rows="4">${escapeHtml(key)}</textarea>
-<button onclick="navigator.clipboard.writeText(document.getElementById('k').value);this.textContent='Copied'">Copy key</button>`
+<button data-done="${escapeHtml(t.copied)}" onclick="navigator.clipboard.writeText(document.getElementById('k').value);this.textContent=this.dataset.done">${escapeHtml(t.copy)}</button>`
     : '';
   res.writeHead(status, {
     'content-type': 'text/html; charset=utf-8',
     'cache-control': 'no-store',
     'referrer-policy': 'no-referrer',
     'x-robots-tag': 'noindex',
+    vary: 'accept-language',
   });
-  res.end(`<!doctype html><html lang="en"><meta charset="utf-8">
+  res.end(`<!doctype html><html lang="${lang}"><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${escapeHtml(title)}</title>
 <style>body{font:16px/1.5 system-ui,sans-serif;max-width:34rem;margin:3rem auto;padding:0 1rem;color:#222}

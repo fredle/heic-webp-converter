@@ -30,6 +30,18 @@ links to the right Microsoft Store page:
 
 Many PCs already have them. Install, then press **Try again**.
 
+## Languages
+
+The window follows Windows' display language, and the picker in the footer
+overrides it: English, German, French, Spanish, Italian, Portuguese, Dutch,
+Polish, Turkish, Russian, Japanese, Korean, and Simplified and Traditional
+Chinese. All text is in `src/i18n.rs`; a test checks that every language has
+every text with the same placeholders. Japanese, Korean and Chinese are drawn
+with Windows' own fonts, loaded only when needed. Right-to-left and
+complex-script languages are not offered because egui cannot shape them.
+The licence server's pages (`server/src/i18n.ts`) use the same languages,
+chosen from the browser's `Accept-Language`.
+
 ## Free and unlocked
 
 Every feature is free. A free run converts three photos at a time, and a

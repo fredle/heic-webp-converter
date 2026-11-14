@@ -7,8 +7,10 @@
 
 mod app;
 mod convert;
+mod i18n;
 mod license;
 mod settings;
+mod theme;
 mod update;
 mod wic;
 

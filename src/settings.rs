@@ -29,6 +29,9 @@ pub struct Settings {
     /// The licence key as pasted; verified on every start.
     #[serde(default)]
     pub license_key: String,
+    /// Display language; `None` follows Windows.
+    #[serde(default)]
+    pub language: Option<crate::i18n::Lang>,
 }
 
 fn default_quality() -> u8 {
@@ -54,6 +57,7 @@ impl Default for Settings {
             max_edge: default_max_edge(),
             out_dir: None,
             license_key: String::new(),
+            language: None,
         }
     }
 }

@@ -22,7 +22,7 @@ impl Format {
         match self {
             Format::Jpg => "JPG",
             Format::Png => "PNG",
-            Format::Webp => "WebP (lossless)",
+            Format::Webp => "WebP",
         }
     }
 
@@ -55,25 +55,16 @@ pub enum Codec {
 }
 
 impl Codec {
-    pub fn explanation(self) -> &'static str {
-        match self {
-            Codec::Heic => {
-                "Windows needs Microsoft's HEIF Image Extension and HEVC Video Extensions to read HEIC photos."
-            }
-            Codec::Avif => "Windows needs Microsoft's AV1 Video Extension to read AVIF images.",
-            Codec::Jxl => "Windows needs Microsoft's JPEG XL Image Extension to read JXL images.",
-        }
-    }
-
-    /// Store pages to open, as (button label, Store product id).
-    pub fn store_products(self) -> &'static [(&'static str, &'static str)] {
+    /// Store pages to open, as (Microsoft's product name, Store product id,
+    /// whether it is free). The names are product names, so not translated.
+    pub fn store_products(self) -> &'static [(&'static str, &'static str, bool)] {
         match self {
             Codec::Heic => &[
-                ("Get HEIF Image Extension (free)", "9PMMSR1CGPWG"),
-                ("Get HEVC Video Extensions", "9NMZLZ57R3T7"),
+                ("HEIF Image Extension", "9PMMSR1CGPWG", true),
+                ("HEVC Video Extensions", "9NMZLZ57R3T7", false),
             ],
-            Codec::Avif => &[("Get AV1 Video Extension (free)", "9MVZQVXJBQ9V")],
-            Codec::Jxl => &[("Get JPEG XL Image Extension (free)", "9MZPRTH5C0TB")],
+            Codec::Avif => &[("AV1 Video Extension", "9MVZQVXJBQ9V", true)],
+            Codec::Jxl => &[("JPEG XL Image Extension", "9MZPRTH5C0TB", true)],
         }
     }
 }
