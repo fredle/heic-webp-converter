@@ -1012,7 +1012,7 @@ dependencies = [
 
 [[package]]
 name = "heic_webp_converter"
-version = "0.2.0"
+version = "0.2.1"
 dependencies = [
  "base64",
  "ed25519-dalek",
